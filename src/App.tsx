@@ -3,11 +3,17 @@ import { LogViewer } from './components/LogViewer';
 import { Dashboard } from './components/Dashboard';
 import { Shield, Settings, Bell, Search, Filter } from 'lucide-react';
 import { useLogStore } from './store/logStore';
+import axios from 'axios';
 
 function App() {
   const [showFilters, setShowFilters] = useState(false);
+  const [filePath, setFilePath] = useState('');
   const setFilters = useLogStore((state) => state.setFilters);
   const filters = useLogStore((state) => state.filters);
+
+  const handleFilePathSubmit = async () => {
+    await axios.post('/api/set-log-file', { filePath });
+  };
 
   return (
     <div className="min-h-screen bg-gray-950 text-gray-100">
@@ -19,10 +25,17 @@ function App() {
               <h1 className="text-xl font-bold">Log Analysis Dashboard</h1>
             </div>
             <div className="flex items-center gap-4">
-              <button
-                onClick={() => setShowFilters(!showFilters)}
-                className="p-2 hover:bg-gray-800 rounded-full"
-              >
+              <input
+                type="text"
+                placeholder="Enter log file path..."
+                value={filePath}
+                onChange={(e) => setFilePath(e.target.value)}
+                className="w-64 p-2 bg-gray-800 border border-gray-700 rounded-md"
+              />
+              <button onClick={handleFilePathSubmit} className="p-2 bg-blue-500 rounded-md text-white">
+                Set Log File
+              </button>
+              <button onClick={() => setShowFilters(!showFilters)} className="p-2 hover:bg-gray-800 rounded-full">
                 <Filter className="w-5 h-5" />
               </button>
               <button className="p-2 hover:bg-gray-800 rounded-full">
