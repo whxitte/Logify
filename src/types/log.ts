@@ -1,42 +1,28 @@
 export interface LogEntry {
-  id: string;
   timestamp: string;
   level: 'INFO' | 'WARN' | 'ERROR' | 'DEBUG';
   message: string;
   source?: string;
-  ip?: string;
-  userAgent?: string;
-  stackTrace?: string[];
+  stackTrace?: string;
+  ipAddress?: string;
   geoLocation?: {
     country: string;
     city: string;
     coordinates: [number, number];
   };
-  metadata?: Record<string, any>;
+  userAgent?: {
+    browser: string;
+    os: string;
+    device: string;
+  };
 }
 
 export interface LogFilter {
-  level?: LogEntry['level'][];
-  search?: string;
+  level?: string[];
   timeRange?: {
     start: Date;
     end: Date;
   };
-  ip?: string;
-}
-
-export interface AlertRule {
-  id: string;
-  name: string;
-  condition: {
-    field: keyof LogEntry;
-    operator: 'equals' | 'contains' | 'regex' | 'threshold';
-    value: any;
-    threshold?: number;
-    timeWindow?: number;
-  };
-  action: {
-    type: 'notification' | 'email' | 'webhook';
-    target: string;
-  };
+  searchTerm?: string;
+  ipAddress?: string;
 }
